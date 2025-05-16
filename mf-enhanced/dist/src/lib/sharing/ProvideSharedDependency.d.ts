@@ -1,7 +1,7 @@
 declare const Dependency: typeof import("webpack").Dependency;
 import type { ObjectDeserializerContext, ObjectSerializerContext } from 'webpack/lib/Dependency';
 declare class ProvideSharedDependency extends Dependency {
-    shareScope: string;
+    shareScope: string | string[];
     name: string;
     version: string | false;
     request: string;
@@ -9,8 +9,9 @@ declare class ProvideSharedDependency extends Dependency {
     requiredVersion: string | false;
     strictVersion: boolean;
     singleton: boolean;
+    layer?: string;
     /**
-     * @param {string} shareScope share scope
+     * @param {string|string[]} shareScope share scope
      * @param {string} name module name
      * @param {string | false} version version
      * @param {string} request request
@@ -18,8 +19,9 @@ declare class ProvideSharedDependency extends Dependency {
      * @param {boolean} requiredVersion version requirement
      * @param {boolean} strictVersion don't use shared version even if version isn't valid
      * @param {boolean} singleton use single global version
+     * @param {string} [layer] layer information
      */
-    constructor(shareScope: string, name: string, version: string | false, request: string, eager: boolean, requiredVersion: string | false, strictVersion: boolean, singleton: boolean);
+    constructor(shareScope: string | string[], name: string, version: string | false, request: string, eager: boolean, requiredVersion: string | false, strictVersion: boolean, singleton: boolean, layer?: string);
     get type(): string;
     /**
      * @returns {string | null} an identifier to merge equal requests

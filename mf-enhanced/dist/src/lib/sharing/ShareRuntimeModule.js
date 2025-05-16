@@ -55,8 +55,9 @@ class ShareRuntimeModule extends RuntimeModule {
                 if (sharedOption) {
                     sharedInitOptions[sharedOption.name] =
                         sharedInitOptions[sharedOption.name] || [];
-                    const isSameVersion = sharedInitOptions[sharedOption.name].find((s) => s.version === sharedOption.version);
-                    if (!isSameVersion) {
+                    const isSameVersionAndLayer = sharedInitOptions[sharedOption.name].find((s) => s.version === sharedOption.version &&
+                        s.shareConfig?.layer === sharedOption.shareConfig?.layer);
+                    if (!isSameVersionAndLayer) {
                         sharedInitOptions[sharedOption.name].push(sharedOption);
                     }
                 }
@@ -65,12 +66,13 @@ class ShareRuntimeModule extends RuntimeModule {
         const sharedInitOptionsStr = Object.keys(sharedInitOptions).reduce((sum, sharedName) => {
             const sharedOptions = sharedInitOptions[sharedName];
             let str = '';
-            sharedOptions.forEach((sharedOption) => {
+            // Ensure all options are included without filtering
+            sharedOptions.forEach((option) => {
                 str += `{${Template.indent([
-                    `version: ${sharedOption.version},`,
-                    `get: ${sharedOption.getter},`,
-                    `scope: ${JSON.stringify(sharedOption.shareScope)},`,
-                    `shareConfig: ${JSON.stringify(sharedOption.shareConfig)}`,
+                    `version: ${option.version},`,
+                    `get: ${option.getter},`,
+                    `scope: ${JSON.stringify(Array.isArray(option.shareScope) ? option.shareScope.flat() : [option.shareScope])},`,
+                    `shareConfig: ${JSON.stringify(option.shareConfig)}`,
                 ])}},`;
             });
             str = `[${str}]`;

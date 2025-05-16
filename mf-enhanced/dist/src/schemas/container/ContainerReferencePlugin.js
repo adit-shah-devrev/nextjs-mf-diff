@@ -30,6 +30,7 @@ exports.default = {
                 'system',
                 'promise',
                 'import',
+                'module-import',
                 'script',
                 'node-commonjs',
             ],
@@ -74,8 +75,19 @@ exports.default = {
                 },
                 shareScope: {
                     description: 'The name of the share scope shared with this remote.',
-                    type: 'string',
-                    minLength: 1,
+                    anyOf: [
+                        {
+                            type: 'string',
+                            minLength: 1,
+                        },
+                        {
+                            type: 'array',
+                            items: {
+                                type: 'string',
+                                minLength: 1,
+                            },
+                        },
+                    ],
                 },
             },
             required: ['external'],
@@ -115,6 +127,10 @@ exports.default = {
     type: 'object',
     additionalProperties: false,
     properties: {
+        async: {
+            description: 'Enable/disable asynchronous loading of runtime modules. When enabled, entry points will be wrapped in asynchronous chunks.',
+            type: 'boolean',
+        },
         remoteType: {
             description: 'The external type of the remote containers.',
             oneOf: [
@@ -128,8 +144,19 @@ exports.default = {
         },
         shareScope: {
             description: "The name of the share scope shared with all remotes (defaults to 'default').",
-            type: 'string',
-            minLength: 1,
+            anyOf: [
+                {
+                    type: 'string',
+                    minLength: 1,
+                },
+                {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        minLength: 1,
+                    },
+                },
+            ],
         },
     },
     required: ['remoteType', 'remotes'],

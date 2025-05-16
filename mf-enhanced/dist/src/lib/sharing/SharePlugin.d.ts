@@ -6,9 +6,8 @@ declare class SharePlugin {
     private _provides;
     constructor(options: SharePluginOptions);
     /**
-     * Apply the plugin
-     * @param {Compiler} compiler the compiler instance
-     * @returns {void}
+     * Applies the plugin to the webpack compiler instance
+     * @param compiler - The webpack compiler instance
      */
     apply(compiler: Compiler): void;
 }

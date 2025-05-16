@@ -1,12 +1,5 @@
 declare const _default: {
     readonly definitions: {
-        readonly RuntimePlugin: {
-            readonly type: "array";
-            readonly items: {
-                readonly type: "string";
-            };
-            readonly description: "Runtime plugin file paths or package name.";
-        };
         readonly AmdContainer: {
             readonly description: "Add a container for define/require functions in the AMD module.";
             readonly type: "string";
@@ -240,30 +233,50 @@ declare const _default: {
         readonly runtime: {
             readonly $ref: "#/definitions/EntryRuntime";
         };
-        readonly runtimePlugins: {
-            readonly $ref: "#/definitions/RuntimePlugin";
-        };
         readonly shareScope: {
             readonly description: "The name of the share scope which is shared with the host (defaults to 'default').";
-            readonly type: "string";
-            readonly minLength: 1;
+            readonly anyOf: readonly [{
+                readonly type: "string";
+                readonly minLength: 1;
+            }, {
+                readonly type: "array";
+                readonly items: {
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+            }];
         };
         readonly experiments: {
+            readonly description: "Experimental features configuration";
             readonly type: "object";
+            readonly additionalProperties: false;
             readonly properties: {
                 readonly asyncStartup: {
                     readonly description: "Enable async startup for the container";
                     readonly type: "boolean";
                 };
                 readonly externalRuntime: {
-                    readonly anyOf: readonly [{
-                        readonly type: "boolean";
-                    }, {
-                        readonly enum: readonly ["provide"];
-                    }];
+                    readonly description: "After setting true, the external MF runtime will be used and the runtime provided by the consumer will be used. (Please make sure your consumer has provideExternalRuntime: true set, otherwise it will not run properly!)";
+                    readonly type: "boolean";
+                    readonly default: false;
+                };
+                readonly provideExternalRuntime: {
+                    readonly description: "Enable providing external runtime";
+                    readonly type: "boolean";
+                    readonly default: false;
                 };
             };
-            readonly additionalProperties: false;
+        };
+        readonly dataPrefetch: {
+            readonly description: "Enable data prefetching for container modules.";
+            readonly type: "boolean";
+        };
+        readonly runtimePlugins: {
+            readonly description: "Array of runtime plugins to be applied";
+            readonly type: "array";
+            readonly items: {
+                readonly type: "string";
+            };
         };
     };
     readonly required: readonly ["name", "exposes"];

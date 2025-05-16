@@ -1,4 +1,4 @@
-import type { ConsumeOptions } from 'webpack/lib/sharing/ConsumeSharedModule';
+import type { ConsumeOptions } from '../../declarations/plugins/sharing/ConsumeSharedModule';
 import type { InputFileSystem } from 'webpack/lib/util/fs';
 /**
  * @see https://docs.npmjs.com/cli/v7/configuring-npm/package-json#urls-as-dependencies
@@ -37,7 +37,8 @@ export declare function normalizeConsumeShareOptions(consumeOptions: ConsumeOpti
         strictVersion: boolean;
         singleton: boolean;
         eager: boolean;
+        layer: string | null | undefined;
     };
-    shareScope: string;
+    shareScope: string | string[];
     shareKey: string;
 };

@@ -76,8 +76,19 @@ exports.default = {
                 },
                 shareScope: {
                     description: 'Share scope name.',
-                    type: 'string',
-                    minLength: 1,
+                    anyOf: [
+                        {
+                            type: 'string',
+                            minLength: 1,
+                        },
+                        {
+                            type: 'array',
+                            items: {
+                                type: 'string',
+                                minLength: 1,
+                            },
+                        },
+                    ],
                 },
                 singleton: {
                     description: 'Allow only a single version of the shared module in share scope (disabled by default).',
@@ -128,10 +139,25 @@ exports.default = {
     type: 'object',
     additionalProperties: false,
     properties: {
+        async: {
+            description: 'Enable/disable asynchronous loading of runtime modules. When enabled, entry points will be wrapped in asynchronous chunks.',
+            type: 'boolean',
+        },
         shareScope: {
             description: "Share scope name used for all shared modules (defaults to 'default').",
-            type: 'string',
-            minLength: 1,
+            anyOf: [
+                {
+                    type: 'string',
+                    minLength: 1,
+                },
+                {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        minLength: 1,
+                    },
+                },
+            ],
         },
         shared: {
             $ref: '#/definitions/Shared',

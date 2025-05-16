@@ -345,7 +345,7 @@ function getRequiredVersionFromDescriptionFile(data, packageName) {
     }
 }
 function normalizeConsumeShareOptions(consumeOptions) {
-    const { requiredVersion = false, strictVersion, singleton = false, eager, shareKey, shareScope, } = consumeOptions;
+    const { requiredVersion = false, strictVersion, singleton = false, eager, shareKey, shareScope, layer, } = consumeOptions;
     return {
         shareConfig: {
             fixedDependencies: false,
@@ -353,6 +353,7 @@ function normalizeConsumeShareOptions(consumeOptions) {
             strictVersion,
             singleton,
             eager,
+            layer,
         },
         shareScope,
         shareKey,

@@ -23,7 +23,7 @@ class ContainerEntryModule extends Module {
     /**
      * @param {string} name container entry name
      * @param {[string, ExposeOptions][]} exposes list of exposed modules
-     * @param {string} shareScope name of the share scope
+     * @param {string|string[]} shareScope name of the share scope
      * @param {string} injectRuntimeEntry the path of injectRuntime file.
      * @param {containerPlugin.ContainerPluginOptions['dataPrefetch']} dataPrefetch whether enable dataPrefetch
      */
@@ -55,7 +55,10 @@ class ContainerEntryModule extends Module {
      * @returns {string} a unique identifier of the module
      */
     identifier() {
-        return `container entry (${this._shareScope}) ${JSON.stringify(this._exposes)} ${this._injectRuntimeEntry} ${JSON.stringify(this._dataPrefetch)}`;
+        const scopeStr = Array.isArray(this._shareScope)
+            ? this._shareScope.join('|')
+            : this._shareScope;
+        return `container entry (${scopeStr}) ${JSON.stringify(this._exposes)} ${this._injectRuntimeEntry} ${JSON.stringify(this._dataPrefetch)}`;
     }
     /**
      * @param {RequestShortener} requestShortener the request shortener

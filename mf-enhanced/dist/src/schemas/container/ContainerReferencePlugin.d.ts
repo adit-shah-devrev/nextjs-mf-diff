@@ -2,7 +2,7 @@ declare const _default: {
     readonly definitions: {
         readonly ExternalsType: {
             readonly description: "Specifies the default type of externals ('amd*', 'umd*', 'system' and 'jsonp' depend on output.libraryTarget set to the same value).";
-            readonly enum: readonly ["var", "module", "assign", "this", "window", "self", "global", "commonjs", "commonjs2", "commonjs-module", "commonjs-static", "amd", "amd-require", "umd", "umd2", "jsonp", "system", "promise", "import", "script", "node-commonjs"];
+            readonly enum: readonly ["var", "module", "assign", "this", "window", "self", "global", "commonjs", "commonjs2", "commonjs-module", "commonjs-static", "amd", "amd-require", "umd", "umd2", "jsonp", "system", "promise", "import", "module-import", "script", "node-commonjs"];
         };
         readonly Remotes: {
             readonly description: "Container locations and request scopes from which modules should be resolved and loaded at runtime. When provided, property name is used as request scope, otherwise request scope is automatically inferred from container location.";
@@ -35,8 +35,16 @@ declare const _default: {
                 };
                 readonly shareScope: {
                     readonly description: "The name of the share scope shared with this remote.";
-                    readonly type: "string";
-                    readonly minLength: 1;
+                    readonly anyOf: readonly [{
+                        readonly type: "string";
+                        readonly minLength: 1;
+                    }, {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "string";
+                            readonly minLength: 1;
+                        };
+                    }];
                 };
             };
             readonly required: readonly ["external"];
@@ -72,6 +80,10 @@ declare const _default: {
     readonly type: "object";
     readonly additionalProperties: false;
     readonly properties: {
+        readonly async: {
+            readonly description: "Enable/disable asynchronous loading of runtime modules. When enabled, entry points will be wrapped in asynchronous chunks.";
+            readonly type: "boolean";
+        };
         readonly remoteType: {
             readonly description: "The external type of the remote containers.";
             readonly oneOf: readonly [{
@@ -83,8 +95,16 @@ declare const _default: {
         };
         readonly shareScope: {
             readonly description: "The name of the share scope shared with all remotes (defaults to 'default').";
-            readonly type: "string";
-            readonly minLength: 1;
+            readonly anyOf: readonly [{
+                readonly type: "string";
+                readonly minLength: 1;
+            }, {
+                readonly type: "array";
+                readonly items: {
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+            }];
         };
     };
     readonly required: readonly ["remoteType", "remotes"];

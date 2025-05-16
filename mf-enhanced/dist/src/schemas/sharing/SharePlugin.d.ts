@@ -56,8 +56,16 @@ declare const _default: {
                 };
                 readonly shareScope: {
                     readonly description: "Share scope name.";
-                    readonly type: "string";
-                    readonly minLength: 1;
+                    readonly anyOf: readonly [{
+                        readonly type: "string";
+                        readonly minLength: 1;
+                    }, {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "string";
+                            readonly minLength: 1;
+                        };
+                    }];
                 };
                 readonly singleton: {
                     readonly description: "Allow only a single version of the shared module in share scope (disabled by default).";
@@ -102,10 +110,22 @@ declare const _default: {
     readonly type: "object";
     readonly additionalProperties: false;
     readonly properties: {
+        readonly async: {
+            readonly description: "Enable/disable asynchronous loading of runtime modules. When enabled, entry points will be wrapped in asynchronous chunks.";
+            readonly type: "boolean";
+        };
         readonly shareScope: {
             readonly description: "Share scope name used for all shared modules (defaults to 'default').";
-            readonly type: "string";
-            readonly minLength: 1;
+            readonly anyOf: readonly [{
+                readonly type: "string";
+                readonly minLength: 1;
+            }, {
+                readonly type: "array";
+                readonly items: {
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+            }];
         };
         readonly shared: {
             readonly $ref: "#/definitions/Shared";

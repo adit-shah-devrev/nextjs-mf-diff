@@ -22,11 +22,11 @@ declare class ContainerEntryModule extends Module {
     /**
      * @param {string} name container entry name
      * @param {[string, ExposeOptions][]} exposes list of exposed modules
-     * @param {string} shareScope name of the share scope
+     * @param {string|string[]} shareScope name of the share scope
      * @param {string} injectRuntimeEntry the path of injectRuntime file.
      * @param {containerPlugin.ContainerPluginOptions['dataPrefetch']} dataPrefetch whether enable dataPrefetch
      */
-    constructor(name: string, exposes: [string, ExposeOptions][], shareScope: string, injectRuntimeEntry: string, dataPrefetch: containerPlugin.ContainerPluginOptions['dataPrefetch']);
+    constructor(name: string, exposes: [string, ExposeOptions][], shareScope: string | string[], injectRuntimeEntry: string, dataPrefetch: containerPlugin.ContainerPluginOptions['dataPrefetch']);
     /**
      * @param {ObjectDeserializerContext} context context
      * @returns {ContainerEntryModule} deserialized container entry module

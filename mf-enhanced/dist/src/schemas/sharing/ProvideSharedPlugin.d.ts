@@ -30,8 +30,49 @@ declare const _default: {
                     readonly type: "string";
                     readonly minLength: 1;
                 };
+                readonly request: {
+                    readonly description: "Import request to match on";
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
                 readonly shareScope: {
                     readonly description: "Share scope name.";
+                    readonly anyOf: readonly [{
+                        readonly type: "string";
+                        readonly minLength: 1;
+                    }, {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "string";
+                            readonly minLength: 1;
+                        };
+                    }];
+                };
+                readonly requiredVersion: {
+                    readonly description: "Version requirement from module in share scope.";
+                    readonly anyOf: readonly [{
+                        readonly description: "No version requirement check.";
+                        readonly enum: readonly [false];
+                    }, {
+                        readonly description: "Version as string. Can be prefixed with '^' or '~' for minimum matches. Each part of the version should be separated by a dot '.'.";
+                        readonly type: "string";
+                    }];
+                };
+                readonly strictVersion: {
+                    readonly description: "Do not accept shared module if version is not valid (defaults to yes, if local fallback module is available and shared module is not a singleton, otherwise no, has no effect if there is no required version specified).";
+                    readonly type: "boolean";
+                };
+                readonly singleton: {
+                    readonly description: "Allow only a single version of the shared module in share scope (disabled by default).";
+                    readonly type: "boolean";
+                };
+                readonly layer: {
+                    readonly description: "Layer in which the shared module should be placed.";
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+                readonly issuerLayer: {
+                    readonly description: "Layer of the issuer.";
                     readonly type: "string";
                     readonly minLength: 1;
                 };
@@ -74,8 +115,16 @@ declare const _default: {
         };
         readonly shareScope: {
             readonly description: "Share scope name used for all provided modules (defaults to 'default').";
-            readonly type: "string";
-            readonly minLength: 1;
+            readonly anyOf: readonly [{
+                readonly type: "string";
+                readonly minLength: 1;
+            }, {
+                readonly type: "array";
+                readonly items: {
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+            }];
         };
     };
     readonly required: readonly ["provides"];

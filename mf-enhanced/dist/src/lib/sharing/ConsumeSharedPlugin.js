@@ -18,14 +18,14 @@ const ConsumeSharedRuntimeModule_1 = __importDefault(require("./ConsumeSharedRun
 const ProvideForSharedDependency_1 = __importDefault(require("./ProvideForSharedDependency"));
 const FederationRuntimePlugin_1 = __importDefault(require("../container/runtime/FederationRuntimePlugin"));
 const ShareRuntimeModule_1 = __importDefault(require("./ShareRuntimeModule"));
+const utils_2 = require("../../utils");
 const ModuleNotFoundError = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack/lib/ModuleNotFoundError'));
 const { RuntimeGlobals } = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack'));
 const LazySet = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack/lib/util/LazySet'));
 const WebpackError = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack/lib/WebpackError'));
-const createSchemaValidation = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack/lib/util/create-schema-validation'));
-const validate = createSchemaValidation(
+const validate = (0, utils_2.createSchemaValidation)(
 //eslint-disable-next-line
-require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack/schemas/plugins/sharing/ConsumeSharedPlugin.check.js')), () => require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack/schemas/plugins/sharing/ConsumeSharedPlugin.json')), {
+require('../../schemas/sharing/ConsumeSharedPlugin.check.js').validate, () => require('../../schemas/sharing/ConsumeSharedPlugin').default, {
     name: 'Consume Shared Plugin',
     baseDataPath: 'options',
 });
@@ -33,6 +33,12 @@ const RESOLVE_OPTIONS = {
     dependencyType: 'esm',
 };
 const PLUGIN_NAME = 'ConsumeSharedPlugin';
+// Helper function to create composite key
+function createLookupKey(request, contextInfo) {
+    return contextInfo.issuerLayer
+        ? `(${contextInfo.issuerLayer})${request}`
+        : request;
+}
 class ConsumeSharedPlugin {
     constructor(options) {
         if (typeof options !== 'string') {
@@ -53,6 +59,9 @@ class ConsumeSharedPlugin {
                         strictVersion: false,
                         singleton: false,
                         eager: false,
+                        issuerLayer: undefined,
+                        layer: undefined,
+                        request: key,
                     }
                 : // key is a request/key
                     // item is a version
@@ -66,22 +75,32 @@ class ConsumeSharedPlugin {
                         packageName: undefined,
                         singleton: false,
                         eager: false,
+                        issuerLayer: undefined,
+                        layer: undefined,
+                        request: key,
                     };
             return result;
-        }, (item, key) => ({
-            import: item.import === false ? undefined : item.import || key,
-            shareScope: item.shareScope || options.shareScope || 'default',
-            shareKey: item.shareKey || key,
-            // @ts-ignore  webpack internal semver has some issue, use runtime semver , related issue: https://github.com/webpack/webpack/issues/17756
-            requiredVersion: item.requiredVersion,
-            strictVersion: typeof item.strictVersion === 'boolean'
-                ? item.strictVersion
-                : item.import !== false && !item.singleton,
-            //@ts-ignore
-            packageName: item.packageName,
-            singleton: !!item.singleton,
-            eager: !!item.eager,
-        }));
+        }, (item, key) => {
+            const request = item.request || key;
+            return {
+                import: item.import === false ? undefined : item.import || request,
+                shareScope: item.shareScope || options.shareScope || 'default',
+                shareKey: item.shareKey || request,
+                requiredVersion: item.requiredVersion === false
+                    ? false
+                    : // @ts-ignore  webpack internal semver has some issue, use runtime semver , related issue: https://github.com/webpack/webpack/issues/17756
+                        item.requiredVersion,
+                strictVersion: typeof item.strictVersion === 'boolean'
+                    ? item.strictVersion
+                    : item.import !== false && !item.singleton,
+                packageName: item.packageName,
+                singleton: !!item.singleton,
+                eager: !!item.eager,
+                issuerLayer: item.issuerLayer ? item.issuerLayer : undefined,
+                layer: item.layer ? item.layer : undefined,
+                request,
+            };
+        });
     }
     apply(compiler) {
         new FederationRuntimePlugin_1.default().apply(compiler);
@@ -190,31 +209,35 @@ class ConsumeSharedPlugin {
                     });
                 });
             };
-            normalModuleFactory.hooks.factorize.tapPromise(PLUGIN_NAME, ({ context, request, dependencies }) => 
-            // wait for resolving to be complete
-            //@ts-ignore
-            promise.then(() => {
-                if (dependencies[0] instanceof ConsumeSharedFallbackDependency_1.default ||
-                    dependencies[0] instanceof ProvideForSharedDependency_1.default) {
-                    return;
-                }
-                const match = unresolvedConsumes.get(request);
-                if (match !== undefined) {
-                    return createConsumeSharedModule(context, request, match);
-                }
-                for (const [prefix, options] of prefixedConsumes) {
-                    if (request.startsWith(prefix)) {
-                        const remainder = request.slice(prefix.length);
-                        return createConsumeSharedModule(context, request, {
-                            ...options,
-                            import: options.import
-                                ? options.import + remainder
-                                : undefined,
-                            shareKey: options.shareKey + remainder,
-                        });
+            normalModuleFactory.hooks.factorize.tapPromise(PLUGIN_NAME, async (resolveData) => {
+                const { context, request, dependencies, contextInfo } = resolveData;
+                // wait for resolving to be complete
+                return promise.then(() => {
+                    if (dependencies[0] instanceof ConsumeSharedFallbackDependency_1.default ||
+                        dependencies[0] instanceof ProvideForSharedDependency_1.default) {
+                        return;
                     }
-                }
-            }));
+                    const match = unresolvedConsumes.get(createLookupKey(request, contextInfo));
+                    if (match !== undefined) {
+                        return createConsumeSharedModule(context, request, match);
+                    }
+                    for (const [prefix, options] of prefixedConsumes) {
+                        const lookup = options.request || prefix;
+                        if (request.startsWith(lookup)) {
+                            const remainder = request.slice(lookup.length);
+                            return createConsumeSharedModule(context, request, {
+                                ...options,
+                                import: options.import
+                                    ? options.import + remainder
+                                    : undefined,
+                                shareKey: options.shareKey + remainder,
+                                layer: options.layer || contextInfo.issuerLayer,
+                            });
+                        }
+                    }
+                    return;
+                });
+            });
             normalModuleFactory.hooks.createModule.tapPromise(PLUGIN_NAME, ({ resource }, { context, dependencies }) => {
                 if (dependencies[0] instanceof ConsumeSharedFallbackDependency_1.default ||
                     dependencies[0] instanceof ProvideForSharedDependency_1.default) {

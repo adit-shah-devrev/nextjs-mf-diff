@@ -68,6 +68,16 @@ declare const _default: {
                         enum?: undefined;
                     })[];
                 };
+                layer: {
+                    description: string;
+                    type: string;
+                    minLength: number;
+                };
+                request: {
+                    description: string;
+                    type: string;
+                    minLength: number;
+                };
             };
         };
         ProvidesItem: {

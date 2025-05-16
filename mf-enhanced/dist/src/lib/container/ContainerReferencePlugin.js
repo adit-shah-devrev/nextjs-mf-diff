@@ -65,7 +65,7 @@ class ContainerReferencePlugin {
             compilation.dependencyFactories.set(FallbackItemDependency_1.default, normalModuleFactory);
             compilation.dependencyFactories.set(FallbackDependency_1.default, new FallbackModuleFactory_1.default());
             normalModuleFactory.hooks.factorize.tap('ContainerReferencePlugin', 
-            // @ts-ignore
+            //@ts-ignore
             (data) => {
                 if (!data.request.includes('!')) {
                     for (const [key, config] of remotes) {

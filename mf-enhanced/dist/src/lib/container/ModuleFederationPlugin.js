@@ -20,13 +20,21 @@ const FederationRuntimePlugin_1 = __importDefault(require("./runtime/FederationR
 const remote_entry_plugin_1 = require("@module-federation/rspack/remote-entry-plugin");
 const MfStartupChunkDependenciesPlugin_1 = __importDefault(require("../startup/MfStartupChunkDependenciesPlugin"));
 const FederationModulesPlugin_1 = __importDefault(require("./runtime/FederationModulesPlugin"));
+const utils_1 = require("../../utils");
 const isValidExternalsType = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack/schemas/plugins/container/ExternalsType.check.js'));
 const { ExternalsPlugin } = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack'));
+const validate = (0, utils_1.createSchemaValidation)(
+//eslint-disable-next-line
+require('../../schemas/container/ModuleFederationPlugin.check.js').validate, () => require('../../schemas/container/ModuleFederationPlugin').default, {
+    name: 'Module Federation Plugin',
+    baseDataPath: 'options',
+});
 class ModuleFederationPlugin {
     /**
      * @param {moduleFederationPlugin.ModuleFederationPluginOptions} options options
      */
     constructor(options) {
+        validate(options);
         this._options = options;
     }
     _patchBundlerConfig(compiler) {

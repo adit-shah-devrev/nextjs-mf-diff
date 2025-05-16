@@ -30,8 +30,8 @@ const o = {
         'system',
         'promise',
         'import',
-        'script',
         'module-import',
+        'script',
         'node-commonjs',
     ],
 };
@@ -55,8 +55,8 @@ function m(s, { instancePath: e = '', parentData: t, parentDataProperty: n, root
         'system' !== s &&
         'promise' !== s &&
         'import' !== s &&
-        'script' !== s &&
         'module-import' !== s &&
+        'script' !== s &&
         'node-commonjs' !== s
         ? ((m.errors = [{ params: { allowedValues: o.enum } }]), !1)
         : ((m.errors = null), !0);

@@ -19,7 +19,7 @@ declare class ProvideSharedModule extends Module {
     private _singleton;
     /**
      * @constructor
-     * @param {string} shareScope shared scope name
+     * @param {string|string[]} shareScope shared scope name
      * @param {string} name shared key
      * @param {string | false} version version
      * @param {string} request request to the provided module
@@ -27,8 +27,9 @@ declare class ProvideSharedModule extends Module {
      * @param {boolean} requiredVersion version requirement
      * @param {boolean} strictVersion don't use shared version even if version isn't valid
      * @param {boolean} singleton use single global version
+     * @param {string} [layer] layer information
      */
-    constructor(shareScope: string, name: string, version: string | false, request: string, eager: boolean, requiredVersion: string | false, strictVersion: boolean, singleton: boolean);
+    constructor(shareScope: string | string[], name: string, version: string | false, request: string, eager: boolean, requiredVersion: string | false, strictVersion: boolean, singleton: boolean, layer?: string);
     /**
      * @returns {string} a unique identifier of the module
      */

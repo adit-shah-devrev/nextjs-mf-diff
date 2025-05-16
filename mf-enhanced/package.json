@@ -1,11 +1,11 @@
 {
   "name": "@module-federation/enhanced",
-  "version": "0.11.4",
+  "version": "0.12.0",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/module-federation/core/",
+    "url": "git+https://github.com/module-federation/core.git",
     "directory": "packages/enhanced"
   },
   "files": [
@@ -87,21 +87,22 @@
     "ajv": "^8.17.1",
     "enhanced-resolve": "^5.0.0",
     "terser": "^5.37.0",
-    "@module-federation/webpack-bundler-runtime": "0.11.4"
+    "@module-federation/webpack-bundler-runtime": "0.12.0"
   },
   "dependencies": {
     "btoa": "^1.2.1",
     "upath": "2.0.1",
-    "@module-federation/bridge-react-webpack-plugin": "0.11.4",
-    "@module-federation/data-prefetch": "0.11.4",
-    "@module-federation/dts-plugin": "0.11.4",
-    "@module-federation/error-codes": "0.11.4",
-    "@module-federation/inject-external-runtime-core-plugin": "0.11.4",
-    "@module-federation/managers": "0.11.4",
-    "@module-federation/manifest": "0.11.4",
-    "@module-federation/rspack": "0.11.4",
-    "@module-federation/runtime-tools": "0.11.4",
-    "@module-federation/sdk": "0.11.4",
-    "@module-federation/cli": "0.11.4"
+    "schema-utils": "^4.3.0",
+    "@module-federation/bridge-react-webpack-plugin": "0.12.0",
+    "@module-federation/data-prefetch": "0.12.0",
+    "@module-federation/dts-plugin": "0.12.0",
+    "@module-federation/error-codes": "0.12.0",
+    "@module-federation/inject-external-runtime-core-plugin": "0.12.0",
+    "@module-federation/managers": "0.12.0",
+    "@module-federation/manifest": "0.12.0",
+    "@module-federation/rspack": "0.12.0",
+    "@module-federation/runtime-tools": "0.12.0",
+    "@module-federation/sdk": "0.12.0",
+    "@module-federation/cli": "0.12.0"
   }
 }

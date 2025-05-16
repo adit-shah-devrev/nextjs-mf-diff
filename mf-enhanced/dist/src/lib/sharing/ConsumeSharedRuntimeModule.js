@@ -50,7 +50,9 @@ class ConsumeSharedRuntimeModule extends RuntimeModule {
                         `shareInfo: {`,
                         Template.indent([
                             `shareConfig: ${JSON.stringify(shareOption.shareConfig, null, 2)},`,
-                            `scope: [${JSON.stringify(shareOption.shareScope || 'default')}],`,
+                            `scope: ${JSON.stringify(Array.isArray(shareOption.shareScope)
+                                ? shareOption.shareScope
+                                : [shareOption.shareScope || 'default'])},`,
                         ]),
                         '},',
                         `shareKey: "${shareOption.shareKey}",`,

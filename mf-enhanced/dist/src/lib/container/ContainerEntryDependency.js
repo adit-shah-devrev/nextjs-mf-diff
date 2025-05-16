@@ -11,7 +11,7 @@ class ContainerEntryDependency extends Dependency {
     /**
      * @param {string} name entry name
      * @param {[string, ExposeOptions][]} exposes list of exposed modules
-     * @param {string} shareScope name of the share scope
+     * @param {string|string[]} shareScope name of the share scope
      * @param {string[]} injectRuntimeEntry the path of injectRuntime file.
      * @param {containerPlugin.ContainerPluginOptions['dataPrefetch']} dataPrefetch whether enable dataPrefetch
      */

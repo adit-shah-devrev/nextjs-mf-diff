@@ -56,6 +56,29 @@ declare const _default: {
                 };
                 readonly shareScope: {
                     readonly description: "Share scope name.";
+                    readonly anyOf: readonly [{
+                        readonly type: "string";
+                        readonly minLength: 1;
+                    }, {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "string";
+                            readonly minLength: 1;
+                        };
+                    }];
+                };
+                readonly layer: {
+                    readonly description: "Layer in which the shared module should be placed.";
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+                readonly issuerLayer: {
+                    readonly description: "Layer of the issuer.";
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+                readonly request: {
+                    readonly description: "Import request to match on";
                     readonly type: "string";
                     readonly minLength: 1;
                 };
@@ -97,8 +120,16 @@ declare const _default: {
         };
         readonly shareScope: {
             readonly description: "Share scope name used for all consumed modules (defaults to 'default').";
-            readonly type: "string";
-            readonly minLength: 1;
+            readonly anyOf: readonly [{
+                readonly type: "string";
+                readonly minLength: 1;
+            }, {
+                readonly type: "array";
+                readonly items: {
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+            }];
         };
     };
     readonly required: readonly ["consumes"];

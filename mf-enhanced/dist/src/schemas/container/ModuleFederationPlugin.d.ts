@@ -87,7 +87,7 @@ declare const _default: {
         };
         readonly ExternalsType: {
             readonly description: "Specifies the default type of externals ('amd*', 'umd*', 'system' and 'jsonp' depend on output.libraryTarget set to the same value).";
-            readonly enum: readonly ["var", "module", "assign", "this", "window", "self", "global", "commonjs", "commonjs2", "commonjs-module", "commonjs-static", "amd", "amd-require", "umd", "umd2", "jsonp", "system", "promise", "import", "script", "module-import", "node-commonjs"];
+            readonly enum: readonly ["var", "module", "assign", "this", "window", "self", "global", "commonjs", "commonjs2", "commonjs-module", "commonjs-static", "amd", "amd-require", "umd", "umd2", "jsonp", "system", "promise", "import", "module-import", "script", "node-commonjs"];
         };
         readonly LibraryCustomUmdCommentObject: {
             readonly description: "Set explicit comments for `commonjs`, `commonjs2`, `amd`, and `root`.";
@@ -239,8 +239,16 @@ declare const _default: {
                 };
                 readonly shareScope: {
                     readonly description: "The name of the share scope shared with this remote.";
-                    readonly type: "string";
-                    readonly minLength: 1;
+                    readonly anyOf: readonly [{
+                        readonly type: "string";
+                        readonly minLength: 1;
+                    }, {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "string";
+                            readonly minLength: 1;
+                        };
+                    }];
                 };
             };
             readonly required: readonly ["external"];
@@ -305,6 +313,21 @@ declare const _default: {
                         readonly $ref: "#/definitions/SharedItem";
                     }];
                 };
+                readonly request: {
+                    readonly description: "Import request to match on";
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+                readonly layer: {
+                    readonly description: "Layer in which the shared module should be placed.";
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+                readonly issuerLayer: {
+                    readonly description: "Layer of the issuer.";
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
                 readonly packageName: {
                     readonly description: "Package name to determine required version from description file. This is only needed when package name can't be automatically determined from request.";
                     readonly type: "string";
@@ -327,12 +350,16 @@ declare const _default: {
                 };
                 readonly shareScope: {
                     readonly description: "Share scope name.";
-                    readonly type: "string";
-                    readonly minLength: 1;
-                };
-                readonly shareStrategy: {
-                    readonly description: "load shared strategy(defaults to 'version-first').";
-                    readonly enum: readonly ["version-first", "loaded-first"];
+                    readonly anyOf: readonly [{
+                        readonly type: "string";
+                        readonly minLength: 1;
+                    }, {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "string";
+                            readonly minLength: 1;
+                        };
+                    }];
                 };
                 readonly singleton: {
                     readonly description: "Allow only a single version of the shared module in share scope (disabled by default).";
@@ -380,55 +407,26 @@ declare const _default: {
     readonly type: "object";
     readonly additionalProperties: false;
     readonly properties: {
-        readonly dataPrefetch: {
-            readonly description: "Enable Data Prefetch";
+        readonly async: {
+            readonly description: "Enable/disable asynchronous loading of runtime modules. When enabled, entry points will be wrapped in asynchronous chunks.";
             readonly type: "boolean";
         };
         readonly exposes: {
             readonly $ref: "#/definitions/Exposes";
         };
         readonly filename: {
-            readonly description: "The filename of the container as relative path inside the `output.path` directory.";
+            readonly description: "The filename for this container relative path inside the `output.path` directory.";
             readonly type: "string";
             readonly absolutePath: false;
-        };
-        readonly getPublicPath: {
-            readonly description: "Custom public path function";
-            readonly type: "string";
-        };
-        readonly implementation: {
-            readonly description: "Bundler runtime path";
-            readonly type: "string";
+            readonly minLength: 1;
         };
         readonly library: {
             readonly $ref: "#/definitions/LibraryOptions";
         };
-        readonly manifest: {
-            readonly description: "Manifest generation options";
-            readonly anyOf: readonly [{
-                readonly type: "boolean";
-            }, {
-                readonly type: "object";
-                readonly properties: {
-                    readonly filePath: {
-                        readonly type: "string";
-                    };
-                    readonly disableAssetsAnalyze: {
-                        readonly type: "boolean";
-                    };
-                    readonly fileName: {
-                        readonly type: "string";
-                    };
-                    readonly additionalData: {
-                        readonly type: "string";
-                        readonly description: "Function string to provide additional data to the manifest";
-                    };
-                };
-            }];
-        };
         readonly name: {
-            readonly description: "The name of the container.";
+            readonly description: "The name for this container.";
             readonly type: "string";
+            readonly minLength: 1;
         };
         readonly remoteType: {
             readonly description: "The external type of the remote containers.";
@@ -442,47 +440,26 @@ declare const _default: {
         readonly runtime: {
             readonly $ref: "#/definitions/EntryRuntime";
         };
-        readonly runtimePlugins: {
-            readonly description: "Runtime plugin file paths or package name";
-            readonly type: "array";
-            readonly items: {
-                readonly type: "string";
-            };
-        };
         readonly shareScope: {
-            readonly description: "Share scope name used for all shared modules (defaults to 'default').";
-            readonly type: "string";
-            readonly minLength: 1;
+            readonly description: "The name of the share scope which is shared with the host (defaults to 'default').";
+            readonly anyOf: readonly [{
+                readonly type: "string";
+                readonly minLength: 1;
+            }, {
+                readonly type: "array";
+                readonly items: {
+                    readonly type: "string";
+                    readonly minLength: 1;
+                };
+            }];
         };
         readonly shareStrategy: {
-            readonly description: "load shared strategy(defaults to 'version-first').";
+            readonly description: "Strategy for resolving shared modules";
             readonly enum: readonly ["version-first", "loaded-first"];
+            readonly type: "string";
         };
         readonly shared: {
             readonly $ref: "#/definitions/Shared";
-        };
-        readonly virtualRuntimeEntry: {
-            readonly description: "Enable virtual runtime entry";
-            readonly type: "boolean";
-        };
-        readonly dev: {
-            readonly description: "Development options";
-            readonly anyOf: readonly [{
-                readonly type: "boolean";
-            }, {
-                readonly type: "object";
-                readonly properties: {
-                    readonly disableLiveReload: {
-                        readonly type: "boolean";
-                    };
-                    readonly disableHotTypesReload: {
-                        readonly type: "boolean";
-                    };
-                    readonly disableDynamicRemoteTypeHints: {
-                        readonly type: "boolean";
-                    };
-                };
-            }];
         };
         readonly dts: {
             readonly description: "TypeScript declaration file generation options";
@@ -603,6 +580,7 @@ declare const _default: {
             };
         };
         readonly bridge: {
+            readonly description: "Bridge configuration options";
             readonly type: "object";
             readonly properties: {
                 readonly disableAlias: {
@@ -611,6 +589,80 @@ declare const _default: {
                     readonly default: false;
                 };
             };
+            readonly additionalProperties: false;
+        };
+        readonly virtualRuntimeEntry: {
+            readonly description: "Uses a virtual module instead of a file for federation runtime entry";
+            readonly type: "boolean";
+        };
+        readonly dev: {
+            readonly description: "Development mode configuration options";
+            readonly anyOf: readonly [{
+                readonly type: "boolean";
+            }, {
+                readonly type: "object";
+                readonly properties: {
+                    readonly disableLiveReload: {
+                        readonly description: "Disable live reload for development mode";
+                        readonly type: "boolean";
+                    };
+                    readonly disableHotTypesReload: {
+                        readonly description: "Disable hot types reload for development mode";
+                        readonly type: "boolean";
+                    };
+                    readonly disableDynamicRemoteTypeHints: {
+                        readonly description: "Disable dynamic remote type hints for development mode";
+                        readonly type: "boolean";
+                    };
+                };
+                readonly additionalProperties: false;
+            }];
+        };
+        readonly manifest: {
+            readonly description: "Manifest generation configuration options. IMPORTANT: When using this option, you must set a string value for `output.publicPath` in your webpack configuration.";
+            readonly anyOf: readonly [{
+                readonly type: "boolean";
+            }, {
+                readonly type: "object";
+                readonly properties: {
+                    readonly filePath: {
+                        readonly description: "Path where the manifest file will be generated";
+                        readonly type: "string";
+                    };
+                    readonly disableAssetsAnalyze: {
+                        readonly description: "Disable assets analyze for manifest generation";
+                        readonly type: "boolean";
+                    };
+                    readonly fileName: {
+                        readonly description: "Name of the manifest file";
+                        readonly type: "string";
+                    };
+                    readonly additionalData: {
+                        readonly description: "Function that provides additional data to the manifest";
+                        readonly instanceof: "Function";
+                    };
+                };
+                readonly additionalProperties: false;
+            }];
+        };
+        readonly runtimePlugins: {
+            readonly description: "Runtime plugin file paths or package names to be included in federation runtime";
+            readonly type: "array";
+            readonly items: {
+                readonly type: "string";
+            };
+        };
+        readonly getPublicPath: {
+            readonly description: "Custom public path function for remote entry";
+            readonly type: "string";
+        };
+        readonly dataPrefetch: {
+            readonly description: "Whether enable data prefetch";
+            readonly type: "boolean";
+        };
+        readonly implementation: {
+            readonly description: "Bundler runtime path";
+            readonly type: "string";
         };
     };
 };

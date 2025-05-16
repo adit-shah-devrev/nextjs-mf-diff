@@ -17,12 +17,10 @@ class ProvideSharedModuleFactory extends ModuleFactory {
      * @returns {void}
      */
     create(data, callback) {
-        // @ts-ignore
         const dep = data
             .dependencies[0];
         callback(null, {
-            // @ts-ignore
-            module: new ProvideSharedModule_1.default(dep.shareScope, dep.name, dep.version, dep.request, dep.eager, dep.requiredVersion, dep.strictVersion, dep.singleton),
+            module: new ProvideSharedModule_1.default(dep.shareScope, dep.name, dep.version, dep.request, dep.eager, dep.requiredVersion, dep.strictVersion, dep.singleton, dep.layer),
         });
     }
 }

@@ -34,7 +34,9 @@ function r(e, { instancePath: t = '', parentData: s, parentDataProperty: n, root
                             'shareScope' !== r &&
                             'singleton' !== r &&
                             'strictVersion' !== r &&
-                            'version' !== r) {
+                            'version' !== r &&
+                            'layer' !== r &&
+                            'request' !== r) {
                             const e = {
                                 params: {
                                     additionalProperty: r,
@@ -44,71 +46,61 @@ function r(e, { instancePath: t = '', parentData: s, parentDataProperty: n, root
                             break;
                         }
                     if (r === l) {
-                        if (void 0 !== s.eager) {
-                            const r = l;
-                            if ('boolean' != typeof s.eager) {
-                                const r = {
-                                    params: {
-                                        type: 'boolean',
-                                    },
-                                };
-                                null === a ? (a = [r]) : a.push(r), l++;
-                            }
-                            var i = r === l;
+                        if (void 0 !== s.request) {
+                            let r = s.request;
+                            const e = l;
+                            if (l === e)
+                                if ('string' == typeof r) {
+                                    if (r.length < 1) {
+                                        const r = {
+                                            params: {},
+                                        };
+                                        null === a ? (a = [r]) : a.push(r), l++;
+                                    }
+                                }
+                                else {
+                                    const r = {
+                                        params: {
+                                            type: 'string',
+                                        },
+                                    };
+                                    null === a ? (a = [r]) : a.push(r), l++;
+                                }
+                            i = e === l;
                         }
                         else
                             i = !0;
                         if (i) {
-                            if (void 0 !== s.requiredVersion) {
-                                let r = s.requiredVersion;
-                                const e = l, t = l;
-                                let n = !1;
-                                const o = l;
-                                if (!1 !== r) {
+                            if (void 0 !== s.eager) {
+                                const r = l;
+                                if ('boolean' != typeof s.eager) {
                                     const r = {
-                                        params: {},
+                                        params: {
+                                            type: 'boolean',
+                                        },
                                     };
                                     null === a ? (a = [r]) : a.push(r), l++;
                                 }
-                                var p = o === l;
-                                if (((n = n || p), !n)) {
-                                    const e = l;
-                                    if ('string' != typeof r) {
-                                        const r = {
-                                            params: {
-                                                type: 'string',
-                                            },
-                                        };
-                                        null === a ? (a = [r]) : a.push(r), l++;
-                                    }
-                                    (p = e === l), (n = n || p);
-                                }
-                                if (n)
-                                    (l = t), null !== a && (t ? (a.length = t) : (a = null));
-                                else {
-                                    const r = {
-                                        params: {},
-                                    };
-                                    null === a ? (a = [r]) : a.push(r), l++;
-                                }
-                                i = e === l;
+                                var i = r === l;
                             }
                             else
                                 i = !0;
                             if (i) {
-                                if (void 0 !== s.shareKey) {
-                                    let r = s.shareKey;
-                                    const e = l;
-                                    if (l === e)
-                                        if ('string' == typeof r) {
-                                            if (r.length < 1) {
-                                                const r = {
-                                                    params: {},
-                                                };
-                                                null === a ? (a = [r]) : a.push(r), l++;
-                                            }
-                                        }
-                                        else {
+                                if (void 0 !== s.requiredVersion) {
+                                    let r = s.requiredVersion;
+                                    const e = l, t = l;
+                                    let n = !1;
+                                    const o = l;
+                                    if (!1 !== r) {
+                                        const r = {
+                                            params: {},
+                                        };
+                                        null === a ? (a = [r]) : a.push(r), l++;
+                                    }
+                                    var p = o === l;
+                                    if (((n = n || p), !n)) {
+                                        const e = l;
+                                        if ('string' != typeof r) {
                                             const r = {
                                                 params: {
                                                     type: 'string',
@@ -116,13 +108,23 @@ function r(e, { instancePath: t = '', parentData: s, parentDataProperty: n, root
                                             };
                                             null === a ? (a = [r]) : a.push(r), l++;
                                         }
+                                        (p = e === l), (n = n || p);
+                                    }
+                                    if (n)
+                                        (l = t), null !== a && (t ? (a.length = t) : (a = null));
+                                    else {
+                                        const r = {
+                                            params: {},
+                                        };
+                                        null === a ? (a = [r]) : a.push(r), l++;
+                                    }
                                     i = e === l;
                                 }
                                 else
                                     i = !0;
                                 if (i) {
-                                    if (void 0 !== s.shareScope) {
-                                        let r = s.shareScope;
+                                    if (void 0 !== s.shareKey) {
+                                        let r = s.shareKey;
                                         const e = l;
                                         if (l === e)
                                             if ('string' == typeof r) {
@@ -146,24 +148,34 @@ function r(e, { instancePath: t = '', parentData: s, parentDataProperty: n, root
                                     else
                                         i = !0;
                                     if (i) {
-                                        if (void 0 !== s.singleton) {
-                                            const r = l;
-                                            if ('boolean' != typeof s.singleton) {
-                                                const r = {
-                                                    params: {
-                                                        type: 'boolean',
-                                                    },
-                                                };
-                                                null === a ? (a = [r]) : a.push(r), l++;
-                                            }
-                                            i = r === l;
+                                        if (void 0 !== s.shareScope) {
+                                            let r = s.shareScope;
+                                            const e = l;
+                                            if (l === e)
+                                                if ('string' == typeof r) {
+                                                    if (r.length < 1) {
+                                                        const r = {
+                                                            params: {},
+                                                        };
+                                                        null === a ? (a = [r]) : a.push(r), l++;
+                                                    }
+                                                }
+                                                else {
+                                                    const r = {
+                                                        params: {
+                                                            type: 'string',
+                                                        },
+                                                    };
+                                                    null === a ? (a = [r]) : a.push(r), l++;
+                                                }
+                                            i = e === l;
                                         }
                                         else
                                             i = !0;
                                         if (i) {
-                                            if (void 0 !== s.strictVersion) {
+                                            if (void 0 !== s.singleton) {
                                                 const r = l;
-                                                if ('boolean' != typeof s.strictVersion) {
+                                                if ('boolean' != typeof s.singleton) {
                                                     const r = {
                                                         params: {
                                                             type: 'boolean',
@@ -175,44 +187,86 @@ function r(e, { instancePath: t = '', parentData: s, parentDataProperty: n, root
                                             }
                                             else
                                                 i = !0;
-                                            if (i)
-                                                if (void 0 !== s.version) {
-                                                    let r = s.version;
-                                                    const e = l, t = l;
-                                                    let n = !1;
-                                                    const o = l;
-                                                    if (!1 !== r) {
+                                            if (i) {
+                                                if (void 0 !== s.strictVersion) {
+                                                    const r = l;
+                                                    if ('boolean' != typeof s.strictVersion) {
                                                         const r = {
-                                                            params: {},
+                                                            params: {
+                                                                type: 'boolean',
+                                                            },
                                                         };
                                                         null === a ? (a = [r]) : a.push(r), l++;
                                                     }
-                                                    var f = o === l;
-                                                    if (((n = n || f), !n)) {
-                                                        const e = l;
-                                                        if ('string' != typeof r) {
-                                                            const r = {
-                                                                params: {
-                                                                    type: 'string',
-                                                                },
-                                                            };
-                                                            null === a ? (a = [r]) : a.push(r), l++;
-                                                        }
-                                                        (f = e === l), (n = n || f);
-                                                    }
-                                                    if (n)
-                                                        (l = t),
-                                                            null !== a && (t ? (a.length = t) : (a = null));
-                                                    else {
-                                                        const r = {
-                                                            params: {},
-                                                        };
-                                                        null === a ? (a = [r]) : a.push(r), l++;
-                                                    }
-                                                    i = e === l;
+                                                    i = r === l;
                                                 }
                                                 else
                                                     i = !0;
+                                                if (i)
+                                                    if (void 0 !== s.version) {
+                                                        let r = s.version;
+                                                        const e = l, t = l;
+                                                        let n = !1;
+                                                        const o = l;
+                                                        if (!1 !== r) {
+                                                            const r = {
+                                                                params: {},
+                                                            };
+                                                            null === a ? (a = [r]) : a.push(r), l++;
+                                                        }
+                                                        var f = o === l;
+                                                        if (((n = n || f), !n)) {
+                                                            const e = l;
+                                                            if ('string' != typeof r) {
+                                                                const r = {
+                                                                    params: {
+                                                                        type: 'string',
+                                                                    },
+                                                                };
+                                                                null === a ? (a = [r]) : a.push(r), l++;
+                                                            }
+                                                            (f = e === l), (n = n || f);
+                                                        }
+                                                        if (n)
+                                                            (l = t),
+                                                                null !== a && (t ? (a.length = t) : (a = null));
+                                                        else {
+                                                            const r = {
+                                                                params: {},
+                                                            };
+                                                            null === a ? (a = [r]) : a.push(r), l++;
+                                                        }
+                                                        i = e === l;
+                                                    }
+                                                    else
+                                                        i = !0;
+                                                if (i) {
+                                                    if (void 0 !== s.layer) {
+                                                        let r = s.layer;
+                                                        const e = l;
+                                                        if (l === e)
+                                                            if ('string' == typeof r) {
+                                                                if (r.length < 1) {
+                                                                    const r = {
+                                                                        params: {},
+                                                                    };
+                                                                    null === a ? (a = [r]) : a.push(r), l++;
+                                                                }
+                                                            }
+                                                            else {
+                                                                const r = {
+                                                                    params: {
+                                                                        type: 'string',
+                                                                    },
+                                                                };
+                                                                null === a ? (a = [r]) : a.push(r), l++;
+                                                            }
+                                                        i = e === l;
+                                                    }
+                                                    else
+                                                        i = !0;
+                                                }
+                                            }
                                         }
                                     }
                                 }

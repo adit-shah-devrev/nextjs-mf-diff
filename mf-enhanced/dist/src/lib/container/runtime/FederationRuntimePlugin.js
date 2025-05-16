@@ -18,11 +18,11 @@ const FederationRuntimeDependency_1 = __importDefault(require("./FederationRunti
 const ModuleDependency = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack/lib/dependencies/ModuleDependency'));
 const { RuntimeGlobals, Template } = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack'));
 const { mkdirpSync } = require((0, normalize_webpack_path_1.normalizeWebpackPath)('webpack/lib/util/fs'));
-const RuntimeToolsPath = require.resolve('@module-federation/runtime-tools');
-const BundlerRuntimePath = require.resolve('@module-federation/webpack-bundler-runtime', {
+const RuntimeToolsPath = require.resolve('@module-federation/runtime-tools/dist/index.esm.js');
+const BundlerRuntimePath = require.resolve('@module-federation/webpack-bundler-runtime/dist/index.esm.js', {
     paths: [RuntimeToolsPath],
 });
-const RuntimePath = require.resolve('@module-federation/runtime', {
+const RuntimePath = require.resolve('@module-federation/runtime/dist/index.esm.js', {
     paths: [RuntimeToolsPath],
 });
 const federationGlobal = (0, utils_1.getFederationGlobalScope)(RuntimeGlobals);
@@ -215,7 +215,7 @@ class FederationRuntimePlugin {
         }
         else {
             if (implementation) {
-                runtimePath = require.resolve(`@module-federation/runtime`, {
+                runtimePath = require.resolve(`@module-federation/runtime/dist/index.esm.js`, {
                     paths: [implementation],
                 });
             }
@@ -267,7 +267,7 @@ class FederationRuntimePlugin {
                 compiler.options.output.uniqueName || `container_${Date.now()}`;
         }
         if (this.options?.implementation) {
-            this.bundlerRuntimePath = require.resolve('@module-federation/webpack-bundler-runtime', {
+            this.bundlerRuntimePath = require.resolve('@module-federation/webpack-bundler-runtime/dist/index.esm.js', {
                 paths: [this.options.implementation],
             });
         }

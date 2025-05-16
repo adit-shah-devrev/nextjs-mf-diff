@@ -10,14 +10,14 @@ declare class RemoteModule extends Module {
     request: string;
     externalRequests: string[];
     internalRequest: string;
-    shareScope: string;
+    shareScope: string | string[];
     /**
      * @param {string} request request string
      * @param {string[]} externalRequests list of external requests to containers
      * @param {string} internalRequest name of exposed module in container
-     * @param {string} shareScope the used share scope name
+     * @param {string|string[]} shareScope scope in which modules are shared
      */
-    constructor(request: string, externalRequests: string[], internalRequest: string, shareScope: string);
+    constructor(request: string, externalRequests: string[], internalRequest: string, shareScope: string | string[]);
     /**
      * @returns {string} a unique identifier of the module
      */
