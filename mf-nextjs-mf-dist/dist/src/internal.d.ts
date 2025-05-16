@@ -1,4 +1,4 @@
-import type { sharePlugin } from '@module-federation/sdk';
+import type { moduleFederationPlugin } from '@module-federation/sdk';
 /**
  * @typedef SharedObject
  * @type {object}
@@ -7,8 +7,10 @@ import type { sharePlugin } from '@module-federation/sdk';
  * @property {boolean} key.requiredVersion - Whether a specific version of the shared object is required.
  * @property {boolean} key.eager - Whether the shared object should be eagerly loaded.
  * @property {boolean} key.import - Whether the shared object should be imported or not.
+ * @property {string} key.layer - The webpack layer this shared module belongs to.
+ * @property {string|string[]} key.issuerLayer - The webpack layer that can import this shared module.
  */
-export declare const DEFAULT_SHARE_SCOPE: sharePlugin.SharedObject;
+export declare const DEFAULT_SHARE_SCOPE: moduleFederationPlugin.SharedObject;
 /**
  * Defines a default share scope for the browser environment.
  * This function takes the DEFAULT_SHARE_SCOPE and sets eager to undefined and import to undefined for all entries.
@@ -18,7 +20,7 @@ export declare const DEFAULT_SHARE_SCOPE: sharePlugin.SharedObject;
  * @type {SharedObject}
  * @returns {SharedObject} - The modified share scope for the browser environment.
  */
-export declare const DEFAULT_SHARE_SCOPE_BROWSER: sharePlugin.SharedObject;
+export declare const DEFAULT_SHARE_SCOPE_BROWSER: moduleFederationPlugin.SharedObject;
 /**
  * Parses the remotes object and checks if they are using a custom promise template or not.
  * If it's a custom promise template, the remote syntax is parsed to get the module name and version number.
